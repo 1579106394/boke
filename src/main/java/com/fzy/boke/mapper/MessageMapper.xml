@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzy.boke.mapper.MessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzy.boke.pojo.Message">
+        <id column="message_id" property="messageId"/>
+        <result column="message_user" property="messageUser"/>
+        <result column="message_content" property="messageContent"/>
+        <result column="message_time" property="messageTime"/>
+        <result column="message_good" property="messageGood"/>
+        <association property="user" resultMap="com.fzy.boke.mapper.UserMapper.BaseResultMap"></association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        message_id, message_user, message_content, message_time, message_good
+    </sql>
+    <select id="findByPage" parameterType="com.fzy.boke.utils.Page" resultMap="BaseResultMap">
+        select * from message
+        inner join user on message_user = user_id
+        <where>
+            <if test="params.messageUser!=null and params.messageUser!=''">
+                user_niko like '%${params.messageUser}%'
+            </if>
+        </where>
+        order by message_good desc, message_time desc
+        limit #{index},#{currentCount}
+    </select>
+    <select id="findCount" parameterType="com.fzy.boke.utils.Page" resultType="java.lang.Integer">
+        select count(*) from message
+        inner join user on message_user = user_id
+        <where>
+            <if test="params.messageUser!=null and params.messageUser!=''">
+                user_niko like '%${params.messageUser}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

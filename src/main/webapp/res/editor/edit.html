@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>wangEditor</title>
+    <link rel="stylesheet" type="text/css" href="dist/css/wangEditor.min.css">
+    <style type="text/css">
+        #div1 {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="div1">
+        <p>请输入内容...</p>
+    </div>
+
+    <script type="text/javascript" src="dist/js/lib/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="dist/js/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var editor = new wangEditor('div1');
+            editor.create();
+        });
+    </script>
+</body>
+</html>

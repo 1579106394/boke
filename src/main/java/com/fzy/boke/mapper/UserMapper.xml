@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzy.boke.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzy.boke.pojo.User">
+        <id column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="user_niko" property="userNiko"/>
+        <result column="user_img" property="userImg"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_telephone" property="userTelephone"/>
+        <result column="user_role" property="userRole"/>
+        <result column="user_active" property="userActive"/>
+    </resultMap>
+
+    <select id="findByPage" parameterType="com.fzy.boke.utils.Page" resultMap="BaseResultMap">
+        select * from user
+        <where>
+            user_role = 1
+            <if test="params.username!=null and params.username!=''">
+                and username like '%${params.username}%'
+            </if>
+            <if test="params.userNiko!=null and params.userNiko!=''">
+                and user_niko like '%${params.userNiko}%'
+            </if>
+        </where>
+        limit #{index},#{currentCount}
+    </select>
+    <select id="findCount" parameterType="com.fzy.boke.utils.Page" resultType="java.lang.Integer">
+        select count(*) from user
+        <where>
+            user_role = 1
+            <if test="params.username!=null and params.username!=''">
+                and username like '%${params.username}%'
+            </if>
+            <if test="params.userNiko!=null and params.userNiko!=''">
+                and user_niko like '%${params.userNiko}%'
+            </if>
+        </where>
+    </select>
+</mapper>

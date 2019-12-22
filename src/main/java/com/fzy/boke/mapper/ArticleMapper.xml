@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzy.boke.mapper.ArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzy.boke.pojo.Article">
+        <id column="article_id" property="articleId"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="artilce_read" property="artilceRead"/>
+        <result column="article_time" property="articleTime"/>
+        <result column="article_source" property="articleSource"/>
+        <result column="article_type" property="articleType"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="article_good" property="articleGood"/>
+    </resultMap>
+    <select id="findByPage" parameterType="com.fzy.boke.utils.Page" resultMap="BaseResultMap">
+        select * from article
+        <where>
+            <if test="params.articleTitle!=null and params.articleTitle!=''">
+                article_title like '%${params.articleTitle}%'
+            </if>
+        </where>
+        order by article_time desc
+        limit #{index},#{currentCount}
+    </select>
+    <select id="findCount" parameterType="com.fzy.boke.utils.Page" resultType="java.lang.Integer">
+        select count(*) from article
+        <where>
+            <if test="params.articleTitle!=null and params.articleTitle!=''">
+                article_title like '%${params.articleTitle}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

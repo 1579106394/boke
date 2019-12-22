@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzy.boke.mapper.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzy.boke.pojo.Comment">
+        <id column="comment_id" property="commentId"/>
+        <result column="comment_user" property="commentUser"/>
+        <result column="comment_content" property="commentContent"/>
+        <result column="comment_time" property="commentTime"/>
+        <result column="comment_article" property="commentArticle"/>
+        <result column="comment_good" property="commentGood"/>
+        <result column="comment_parent" property="commentParent"/>
+        <association property="user" resultMap="com.fzy.boke.mapper.UserMapper.BaseResultMap"/>
+        <association property="article" resultMap="com.fzy.boke.mapper.ArticleMapper.BaseResultMap"/>
+    </resultMap>
+    <select id="findByPage" parameterType="com.fzy.boke.utils.Page" resultMap="BaseResultMap">
+        select * from comment
+        inner join user on comment_user = user_id
+        inner join article on article_id = comment_article
+        <where>
+            <if test="params.commentUser!=null and params.commentUser!=''">
+                user_niko like '%${params.commentUser}%'
+            </if>
+        </where>
+        order by comment_good desc, comment_time desc
+        limit #{index},#{currentCount}
+    </select>
+    <select id="findCount" parameterType="com.fzy.boke.utils.Page" resultType="java.lang.Integer">
+        select count(*) from comment
+        inner join user on comment_user = user_id
+        inner join article on article_id = comment_article
+        <where>
+            <if test="params.commentUser!=null and params.commentUser!=''">
+                user_niko like '%${params.commentUser}%'
+            </if>
+        </where>
+    </select>
+    <select id="getListByArticle" resultMap="BaseResultMap">
+        select * from comment
+        inner join user on comment_user = user_id
+        inner join article on article_id = comment_article
+        where comment_article = #{id}
+    </select>
+</mapper>
